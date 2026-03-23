@@ -20,7 +20,7 @@ const BANNER = `   __ _  _ _       _    _
   / _\` || (_)_ __ | |_ | |__   __ _ __   __ ___  _ __
  | (_| || | | '_ \\| __|| '_ \\ / _\` |\\ \\ / // _ \\| '_ \\
   \\__, ||_|_|_| |_|\\__||_| |_|\\__,_| \\_V /|  __/| | | |
-  |___/                                    \\___| |_| |_|`;
+  |___/                                    \\___||_| |_|`;
 
 let output;
 let input;
@@ -44,7 +44,7 @@ export function initTerminal() {
   try {
     const saved = sessionStorage.getItem('glinthaven_history');
     if (saved) history = JSON.parse(saved);
-  } catch {}
+  } catch { }
 
   // Attach events
   input.addEventListener('keydown', handleKeyDown);
@@ -120,7 +120,7 @@ async function executeCommand(raw) {
   history.unshift(raw);
   if (history.length > 100) history.pop();
   historyIndex = -1;
-  try { sessionStorage.setItem('glinthaven_history', JSON.stringify(history)); } catch {}
+  try { sessionStorage.setItem('glinthaven_history', JSON.stringify(history)); } catch { }
 
   input.value = '';
 
