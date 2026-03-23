@@ -93,9 +93,21 @@ Glinthaven uses free-tier APIs. Keys are stored in your browser's `localStorage`
 
 > **Note:** AlienVault OTX works without an API key, so you can start searching immediately.
 
-## Building & Running with Docker
+## Deploying with Docker
 
 Running Glinthaven via Docker is highly recommended to circumvent any browser CORS restrictions. The Docker setup automatically runs the backend caching proxy and serves the frontend.
+
+### Option 1: Quick Deployment (Pre-built Image)
+You can instantly deploy the latest version of Glinthaven directly from the GitHub Container Registry. No source code compilation required!
+
+```bash
+# Pull and start the pre-built container from GHCR
+docker run -p 8000:3000 -d ghcr.io/edgevolt/glinthaven:latest
+```
+Then launch http://localhost:8000 in your browser.
+
+### Option 2: Build from Source Local Setup
+If you plan to modify the code or prefer to build the container yourself:
 
 ```bash
 # Using docker-compose (easiest):
