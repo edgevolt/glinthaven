@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   glinthaven:
     image: ghcr.io/edgevolt/glinthaven:latest
