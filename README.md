@@ -57,7 +57,9 @@ Try `help start` in the terminal for a guided walkthrough.
 | Command | Description |
 |---------|-------------|
 | `<ioc>` | Paste any IOC directly to search it |
+| `<ioc> --debug` | Search with debug info (latency, HTTP status, endpoint) |
 | `search <ioc>` | Explicitly search an IOC |
+| `debug [on\|off]` | Toggle persistent debug mode for all searches |
 | `help [topic]` | Show help (`commands`, `ioc`, `start`, `examples`, `api`) |
 | `settings` | Open API key configuration |
 | `clear` | Clear the terminal |

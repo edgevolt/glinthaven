@@ -77,7 +77,8 @@ function helpExamples() {
 <div class="term-line"><span style="color:var(--text-muted)">❯</span> <span style="color:var(--cyan)">evil.example.com</span> <span class="term-system">← check a domain</span></div>
 <div class="term-line"><span style="color:var(--text-muted)">❯</span> <span style="color:var(--cyan)">d41d8cd98f00b204e9800998ecf8427e</span> <span class="term-system">← search an MD5 hash</span></div>
 <div class="term-line"><span style="color:var(--text-muted)">❯</span> <span style="color:var(--cyan)">CVE-2024-1234</span> <span class="term-system">← look up a CVE</span></div>
-<div class="term-line"><span style="color:var(--text-muted)">❯</span> <span style="color:var(--cyan)">search https://suspicious.site/page</span> <span class="term-system">← URL search with command prefix</span></div>`;
+<div class="term-line"><span style="color:var(--text-muted)">❯</span> <span style="color:var(--cyan)">search https://suspicious.site/page</span> <span class="term-system">← URL search with command prefix</span></div>
+<div class="term-line"><span style="color:var(--text-muted)">❯</span> <span style="color:var(--cyan)">8.8.8.8 --debug</span> <span class="term-system">← search with debug info</span></div>`;
 }
 
 function helpAPI() {
