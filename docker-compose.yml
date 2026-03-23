@@ -2,6 +2,7 @@ version: '3.8'
 
 services:
   glinthaven:
+    image: ghcr.io/edgevolt/glinthaven:latest
     build: .
     ports:
       - "8000:3000"
