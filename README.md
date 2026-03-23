@@ -5,7 +5,7 @@
 <h1 align="center">Glinthaven</h1>
 
 <p align="center">
-  <strong>Where security research and OTI find their flow.</strong><br/>
+  <strong>Where security research and OSINT find their flow.</strong><br/>
   Paste an IP, domain, hash, URL, email, or CVE and get results from multiple sources in seconds.
 </p>
 

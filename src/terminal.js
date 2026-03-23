@@ -246,7 +246,7 @@ function showHistory() {
 
 function showAbout() {
   appendHTML(`<div class="term-section">About Glinthaven</div>
-<div class="term-line"><strong>Glinthaven</strong> — Where security research and OTI find their flow.</div>
+<div class="term-line"><strong>Glinthaven</strong> — Where security research and OSINT find their flow.</div>
 <div class="term-line" style="margin-top:var(--sp-sm)">Paste an IP, domain, hash, URL, email, or CVE and instantly query multiple threat intel sources in parallel.</div>
 <div class="term-line" style="margin-top:var(--sp-sm)">Sources: VirusTotal · AbuseIPDB · Shodan · AlienVault OTX</div>
 <div class="term-line term-system" style="margin-top:var(--sp-sm)">All data stays in your browser. API keys are stored in localStorage.</div>`);
