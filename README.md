@@ -103,9 +103,9 @@ docker compose up -d --build
 
 # Or using plain Docker:
 docker build -t glinthaven .
-docker run -p 3000:3000 -d glinthaven
+docker run -p 8000:3000 -d glinthaven
 ```
-Then launch http://localhost:3000.
+Then launch http://localhost:8000.
 
 ### Local Node Production
 ```bash

@@ -3,3 +3,12 @@ dist
 .git
 .env
 .DS_Store
+
+# Ignore docs & configs to prevent unnecessary Docker rebuilds
+README.md
+CHANGELOG.md
+CONTRIBUTING.md
+LICENSE
+Dockerfile
+docker-compose.yml
+.gitignore
