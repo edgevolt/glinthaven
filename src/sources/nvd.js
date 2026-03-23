@@ -21,7 +21,7 @@ export default {
     if (apiKey) headers['apiKey'] = apiKey;
 
     const res = await fetch(
-      `https://services.nvd.nist.gov/rest/json/cves/2.0?cveId=${encodeURIComponent(ioc.value)}`,
+      `/api/proxy/nvd?cveId=${encodeURIComponent(ioc.value)}`,
       { headers }
     );
 

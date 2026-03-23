@@ -16,7 +16,7 @@ export default {
   rateLimit: '1 request/sec (free tier)',
 
   async query(ioc, apiKey) {
-    const res = await fetch(`https://api.shodan.io/shodan/host/${ioc.value}?key=${apiKey}`);
+    const res = await fetch(`/api/proxy/shodan/shodan/host/${ioc.value}?key=${apiKey}`);
 
     if (res.status === 404) {
       return { severity: 'info', fields: [{ key: 'Result', value: 'Host not found in Shodan' }] };

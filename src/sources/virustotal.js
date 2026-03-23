@@ -18,14 +18,14 @@ export default {
   async query(ioc, apiKey) {
     let endpoint;
     if (['md5', 'sha1', 'sha256'].includes(ioc.type)) {
-      endpoint = `https://www.virustotal.com/api/v3/files/${ioc.value}`;
+      endpoint = `/api/proxy/virustotal/files/${ioc.value}`;
     } else if (ioc.type === 'domain') {
-      endpoint = `https://www.virustotal.com/api/v3/domains/${ioc.value}`;
+      endpoint = `/api/proxy/virustotal/domains/${ioc.value}`;
     } else if (['ipv4', 'ipv6'].includes(ioc.type)) {
-      endpoint = `https://www.virustotal.com/api/v3/ip_addresses/${ioc.value}`;
+      endpoint = `/api/proxy/virustotal/ip_addresses/${ioc.value}`;
     } else if (ioc.type === 'url') {
       const urlId = btoa(ioc.value).replace(/=+$/, '');
-      endpoint = `https://www.virustotal.com/api/v3/urls/${urlId}`;
+      endpoint = `/api/proxy/virustotal/urls/${urlId}`;
     }
 
     const res = await fetch(endpoint, {

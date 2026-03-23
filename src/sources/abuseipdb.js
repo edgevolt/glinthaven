@@ -17,7 +17,7 @@ export default {
 
   async query(ioc, apiKey) {
     const res = await fetch(
-      `https://api.abuseipdb.com/api/v2/check?ipAddress=${encodeURIComponent(ioc.value)}&maxAgeInDays=90&verbose`,
+      `/api/proxy/abuseipdb?ipAddress=${encodeURIComponent(ioc.value)}`,
       { headers: { Key: apiKey, Accept: 'application/json' } }
     );
 

@@ -93,11 +93,24 @@ Glinthaven uses free-tier APIs. Keys are stored in your browser's `localStorage`
 
 > **Note:** AlienVault OTX works without an API key, so you can start searching immediately.
 
-## Building for Production
+## Building & Running with Docker
+
+Running Glinthaven via Docker is highly recommended to circumvent any browser CORS restrictions. The Docker setup automatically runs the backend caching proxy and serves the frontend.
 
 ```bash
-npm run build     # Output in dist/
-npm run preview   # Preview the production build locally
+# Using docker-compose (easiest):
+docker compose up -d --build
+
+# Or using plain Docker:
+docker build -t glinthaven .
+docker run -p 3000:3000 -d glinthaven
+```
+Then launch http://localhost:3000.
+
+### Local Node Production
+```bash
+npm run build     # Build the frontend to dist/
+npm start         # Run the proxy serving the frontend
 ```
 
 ## Project Structure

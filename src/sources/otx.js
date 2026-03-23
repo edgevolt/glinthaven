@@ -19,15 +19,15 @@ export default {
     let endpoint;
     if (['ipv4', 'ipv6'].includes(ioc.type)) {
       const section = ioc.type === 'ipv4' ? 'IPv4' : 'IPv6';
-      endpoint = `https://otx.alienvault.com/api/v1/indicators/${section}/${ioc.value}/general`;
+      endpoint = `/api/proxy/otx/indicators/${section}/${ioc.value}/general`;
     } else if (ioc.type === 'domain') {
-      endpoint = `https://otx.alienvault.com/api/v1/indicators/domain/${ioc.value}/general`;
+      endpoint = `/api/proxy/otx/indicators/domain/${ioc.value}/general`;
     } else if (ioc.type === 'url') {
-      endpoint = `https://otx.alienvault.com/api/v1/indicators/url/${encodeURIComponent(ioc.value)}/general`;
+      endpoint = `/api/proxy/otx/indicators/url/${encodeURIComponent(ioc.value)}/general`;
     } else if (['md5', 'sha1', 'sha256'].includes(ioc.type)) {
-      endpoint = `https://otx.alienvault.com/api/v1/indicators/file/${ioc.value}/general`;
+      endpoint = `/api/proxy/otx/indicators/file/${ioc.value}/general`;
     } else if (ioc.type === 'cve') {
-      endpoint = `https://otx.alienvault.com/api/v1/indicators/cve/${ioc.value}/general`;
+      endpoint = `/api/proxy/otx/indicators/cve/${ioc.value}/general`;
     }
 
     if (!endpoint) throw new Error('Unsupported IOC type for OTX');
