@@ -11,6 +11,7 @@
 export default {
   id: 'nvd',
   name: 'NIST NVD',
+  category: 'Vulnerabilities',
   supportedTypes: ['cve'],
   requiresKey: false,
   signupUrl: 'https://nvd.nist.gov/developers/request-an-api-key',

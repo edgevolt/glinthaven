@@ -36,6 +36,8 @@ function helpCommands() {
   <tr><td>debug [on|off]</td><td>Toggle persistent debug mode for all searches</td></tr>
   <tr><td>help [topic]</td><td>Show help (topics: commands, ioc, start, examples, api)</td></tr>
   <tr><td>settings</td><td>Open API key settings</td></tr>
+  <tr><td>setup</td><td>Launch the Quick Setup Wizard</td></tr>
+  <tr><td>lock</td><td>Lock the crypto vault and return to launch screen</td></tr>
   <tr><td>clear</td><td>Clear the terminal</td></tr>
   <tr><td>history</td><td>Show command history</td></tr>
   <tr><td>about</td><td>About Glinthaven</td></tr>

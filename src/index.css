@@ -68,11 +68,13 @@ body {
   background: var(--bg-primary);
   color: var(--text-primary);
   min-height: 100vh;
+  min-height: 100dvh;
   overflow-x: hidden;
 }
 
 #app {
   min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   flex-direction: column;
 }
@@ -95,6 +97,7 @@ body {
   align-items: center;
   justify-content: center;
   min-height: 100vh;
+  min-height: 100dvh;
   position: relative;
   overflow: hidden;
 }
@@ -250,6 +253,7 @@ body {
   display: flex;
   flex-direction: column;
   height: 100vh;
+  height: 100dvh;
   background: var(--bg-primary);
 }
 
@@ -635,6 +639,22 @@ body {
 }
 
 /* Settings form */
+.setting-category-title {
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--cyan-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 1px solid var(--bg-elevated);
+  padding-bottom: 0.25rem;
+}
+
+.setting-category-title:first-child {
+  margin-top: 0;
+}
+
 .setting-group {
   margin-bottom: var(--sp-lg);
 }
@@ -702,6 +722,40 @@ body {
 }
 
 /* ========================================
+   WIZARD
+   ======================================== */
+.wizard-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--sp-md) var(--sp-lg);
+  border-top: 1px solid var(--bg-elevated);
+}
+
+.wizard-btn {
+  font-size: 0.85rem;
+  padding: 0.5em 1.2em;
+}
+
+.wizard-dots {
+  display: flex;
+  gap: 6px;
+}
+
+.wizard-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--bg-elevated);
+  transition: background var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.wizard-dot.active {
+  background: var(--cyan);
+  box-shadow: 0 0 8px var(--cyan-glow);
+}
+
+/* ========================================
    RESPONSIVE
    ======================================== */
 @media (max-width: 640px) {
@@ -711,6 +765,7 @@ body {
   .term-kv { flex-direction: column; gap: 0.1em; }
   .term-kv .key { min-width: unset; }
   .hero-title { font-size: 2.2rem; }
+  .term-banner { font-size: 0.55rem; }
 }
 
 /* Print — hide chrome */

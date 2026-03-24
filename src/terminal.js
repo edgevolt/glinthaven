@@ -15,6 +15,9 @@ import {
   renderSection,
   renderSummary,
 } from './results-renderer.js';
+import { launchWizard } from './wizard.js';
+import { lockVault } from './settings.js';
+import pkg from '../package.json';
 
 const BANNER = `   __ _  _ _       _    _
   / _\` || (_)_ __ | |_ | |__   __ _ __   __ ___  _ __
@@ -142,6 +145,13 @@ async function executeCommand(raw) {
     case 'settings':
       openSettings();
       break;
+    case 'setup':
+      launchWizard(true);
+      break;
+    case 'lock':
+      lockVault();
+      location.reload();
+      break;
     case 'about':
       showAbout();
       break;
@@ -245,10 +255,10 @@ function showHistory() {
 }
 
 function showAbout() {
-  appendHTML(`<div class="term-section">About Glinthaven</div>
+  appendHTML(`<div class="term-section">About Glinthaven <span style="color:var(--text-muted); font-size:0.85em; font-weight:normal;">v${pkg.version}</span></div>
 <div class="term-line"><strong>Glinthaven</strong> — Where security research and OSINT find their flow.</div>
 <div class="term-line" style="margin-top:var(--sp-sm)">Paste an IP, domain, hash, URL, email, or CVE and instantly query multiple threat intel sources in parallel.</div>
-<div class="term-line" style="margin-top:var(--sp-sm)">Sources: VirusTotal · AbuseIPDB · Shodan · AlienVault OTX</div>
+<div class="term-line" style="margin-top:var(--sp-sm)">Sources: VirusTotal · AbuseIPDB · Shodan · AlienVault OTX · NIST NVD · urlscan.io</div>
 <div class="term-line term-system" style="margin-top:var(--sp-sm)">All data stays in your browser. API keys are stored in localStorage.</div>`);
 }
 

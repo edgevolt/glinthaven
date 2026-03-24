@@ -27,6 +27,9 @@ export default {
   // Human-readable name shown in results and settings
   name: 'Your Source',
 
+  // Category for settings UI grouping
+  category: 'General Threat Intel',
+
   // Which IOC types this source can handle
   // Options: 'ipv4', 'ipv6', 'domain', 'url', 'md5', 'sha1', 'sha256', 'email', 'cve'
   supportedTypes: ['ipv4', 'domain'],
@@ -37,8 +40,14 @@ export default {
   // Where users can sign up for a free API key
   signupUrl: 'https://your-service.com/signup',
 
-  // Human-readable rate limit info shown in the settings panel
-  rateLimit: '100 requests/day',
+  // Rate limit text (e.g. '1 request/sec' or '1000 requests/day')
+  rateLimit: '1 request/sec',
+
+  // Optional: Function to instantly validate an API key in the Setup Wizard
+  async testAuth(apiKey) {
+    const res = await fetch(`/api/proxy/yoursource/test`, { headers: { 'key': apiKey } });
+    if (res.status === 401) throw new Error('API Key invalid');
+  },
 
   // The query function — called with the IOC and the user's API key
   async query(ioc, apiKey) {

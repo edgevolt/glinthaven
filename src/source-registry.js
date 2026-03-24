@@ -7,11 +7,13 @@
  * @typedef {Object} Source
  * @property {string}   id             - Unique identifier (used as localStorage key)
  * @property {string}   name           - Human-readable name
+ * @property {string}   category       - Category for settings UI grouping
  * @property {string[]} supportedTypes - IOC types this source can query
  * @property {boolean}  requiresKey    - Whether an API key is required to query
  * @property {string}   signupUrl      - URL where users can get a free API key
- * @property {string}   rateLimit      - Human-readable rate limit description
- * @property {function(ioc: {type: string, value: string}, apiKey: string): Promise<Result>} query
+ * @property {string}   rateLimit      - Free tier rate limits (shown in settings UI)
+ * @property {function(string): Promise<void>} [testAuth] - Optional function to validate an API key instantly
+ * @property {function({type: string, value: string}, string?): Promise<Object>} query - The search function
  *
  * @typedef {Object} Result
  * @property {'info'|'low'|'medium'|'high'} severity - Overall threat severity
@@ -28,6 +30,7 @@ import abuseipdb from './sources/abuseipdb.js';
 import shodan    from './sources/shodan.js';
 import otx       from './sources/otx.js';
 import nvd       from './sources/nvd.js';
+import urlscan   from './sources/urlscan.js';
 
 const sources = [
   virustotal,
@@ -35,10 +38,11 @@ const sources = [
   shodan,
   otx,
   nvd,
+  urlscan,
 ];
 
 // ─── Validation (dev-time safety) ────────────────────────────────────
-const REQUIRED_FIELDS = ['id', 'name', 'supportedTypes', 'requiresKey', 'signupUrl', 'rateLimit', 'query'];
+const REQUIRED_FIELDS = ['id', 'name', 'category', 'supportedTypes', 'requiresKey', 'signupUrl', 'rateLimit', 'query'];
 
 for (const src of sources) {
   for (const field of REQUIRED_FIELDS) {

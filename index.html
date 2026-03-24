@@ -83,6 +83,35 @@
         </div>
       </div>
     </div>
+
+    <!-- Setup Wizard Modal -->
+    <div id="wizard-modal" class="modal-overlay hidden">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h2>Quick Setup Wizard</h2>
+          <button id="wizard-close" class="modal-close">✕</button>
+        </div>
+        <div class="modal-body" id="wizard-body" style="min-height: 180px;">
+          <!-- populated by wizard.js -->
+        </div>
+        <div class="wizard-footer">
+          <button id="wizard-prev" class="launch-btn wizard-btn" style="visibility: hidden;">Back</button>
+          <div id="wizard-dots" class="wizard-dots"></div>
+          <button id="wizard-next" class="launch-btn wizard-btn">Next</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Vault Modal -->
+    <div id="vault-modal" class="modal-overlay hidden" style="z-index: 9999; backdrop-filter: blur(10px); background: rgba(0,0,0,0.85);">
+      <div class="modal-card" style="max-width: 400px; padding: var(--sp-lg)">
+        <h2 id="vault-title" style="margin-bottom: var(--sp-sm)">Unlock Local Vault</h2>
+        <p id="vault-desc" style="color:var(--text-secondary); margin-bottom: var(--sp-md); font-size: 0.9rem;">Enter your Master Password to decrypt your API keys.</p>
+        <input type="password" id="vault-password" class="setting-input" placeholder="Master Password..." autocomplete="current-password" style="font-size: 1.1rem; padding: 0.75rem" />
+        <p id="vault-error" class="term-warning" style="display:none; margin-top: var(--sp-sm);">Incorrect password.</p>
+        <button id="vault-submit" class="launch-btn" style="margin-top: var(--sp-lg); width: 100%;">Unlock Sandbox</button>
+      </div>
+    </div>
   </div>
 
   <script type="module" src="/src/main.js"></script>

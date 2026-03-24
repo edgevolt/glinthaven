@@ -10,6 +10,7 @@
 export default {
   id: 'otx',
   name: 'AlienVault OTX',
+  category: 'General Threat Intel',
   supportedTypes: ['ipv4', 'ipv6', 'domain', 'url', 'md5', 'sha1', 'sha256', 'cve'],
   requiresKey: false,
   signupUrl: 'https://otx.alienvault.com/accounts/signup/',

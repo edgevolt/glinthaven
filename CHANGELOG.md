@@ -5,6 +5,15 @@ All notable changes to Glinthaven will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.0-alpha] — 2026-03-24
+
+### Added
+- **urlscan.io Integration** — Added urlscan.io source for sandbox scanning of domains, URLs, and IPs
+- **Source Toggles** — Added checkboxes in the settings menu to selectively enable or disable specific threat intel sources
+- **Source Grouping** — Grouped the settings UI logically by function (General Threat Intel, Infrastructure, etc.)
+- **Quick Setup Wizard** — Added a dynamic setup wizard that auto-launches for new users (or via `setup` command) to configure API keys
+- **Mobile Support** — Improved mobile layout support with dynamic viewport height to prevent terminal clipping
+
 ## [0.0.1-alpha] — 2026-03-22
 
 First alpha release of Glinthaven.

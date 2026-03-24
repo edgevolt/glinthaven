@@ -1,7 +1,7 @@
 {
   "name": "glinthaven",
   "private": true,
-  "version": "0.0.1",
+  "version": "0.1.0-alpha",
   "description": "Fast, CLI-powered threat intelligence IOC lookup from your browser.",
   "type": "module",
   "license": "MIT",

@@ -10,7 +10,7 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/version-0.0.1--alpha-cyan" alt="Version" />
+  <img src="https://img.shields.io/badge/version-0.1.0--alpha-blue.svg" alt="Version" />
   <img src="https://img.shields.io/badge/license-MIT-blue" alt="License" />
   <img src="https://img.shields.io/badge/bundle-7.5KB_gzipped-green" alt="Bundle size" />
 </p>

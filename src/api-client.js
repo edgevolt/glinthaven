@@ -6,7 +6,7 @@
  */
 
 import { getSourcesForType } from './source-registry.js';
-import { getApiKey } from './settings.js';
+import { getApiKey, isSourceEnabled } from './settings.js';
 
 /**
  * Query all applicable sources for a given IOC.
@@ -21,6 +21,8 @@ export async function queryIOC(ioc, onUpdate, options = {}) {
   const debug = options.debug || false;
 
   const promises = sources.map(async (source) => {
+    if (!isSourceEnabled(source.id)) return;
+
     // Check for required API key
     const apiKey = getApiKey(source.id);
     if (source.requiresKey && !apiKey) {

@@ -10,10 +10,17 @@
 export default {
   id: 'shodan',
   name: 'Shodan',
+  category: 'Network & Infrastructure',
   supportedTypes: ['ipv4'],
   requiresKey: true,
   signupUrl: 'https://account.shodan.io/register',
   rateLimit: '1 request/sec (free tier)',
+
+  async testAuth(apiKey) {
+    const res = await fetch(`/api/proxy/shodan/api-info?key=${apiKey}`);
+    if (res.status === 401) throw new Error('API Key invalid');
+    if (!res.ok) throw new Error('Could not verify API key');
+  },
 
   async query(ioc, apiKey) {
     const res = await fetch(`/api/proxy/shodan/shodan/host/${ioc.value}?key=${apiKey}`);

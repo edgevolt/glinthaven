@@ -10,10 +10,19 @@
 export default {
   id: 'virustotal',
   name: 'VirusTotal',
+  category: 'General Threat Intel',
   supportedTypes: ['ipv4', 'ipv6', 'domain', 'url', 'md5', 'sha1', 'sha256'],
   requiresKey: true,
   signupUrl: 'https://www.virustotal.com/gui/join-us',
   rateLimit: '4 requests/min',
+
+  async testAuth(apiKey) {
+    const res = await fetch('/api/proxy/virustotal/files/d41d8cd98f00b204e9800998ecf8427e', {
+      headers: { 'x-apikey': apiKey }
+    });
+    if (res.status === 401 || res.status === 403) throw new Error('API Key invalid');
+    if (!res.ok) throw new Error('Could not verify API key');
+  },
 
   async query(ioc, apiKey) {
     let endpoint;

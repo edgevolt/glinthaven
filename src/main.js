@@ -4,7 +4,8 @@
 
 import './index.css';
 import { initTerminal } from './terminal.js';
-import { renderSettings } from './settings.js';
+import { renderSettings, hasVault, isVaultUnlocked, unlockVault } from './settings.js';
+import { initWizard } from './wizard.js';
 
 // --- DOM References ---
 const hero = document.getElementById('landing-hero');
@@ -16,11 +17,63 @@ const settingsModal = document.getElementById('settings-modal');
 const settingsClose = document.getElementById('settings-close');
 const terminalInput = document.getElementById('terminal-input');
 
+// --- Vault UI ---
+const vaultModal = document.getElementById('vault-modal');
+const vaultTitle = document.getElementById('vault-title');
+const vaultDesc = document.getElementById('vault-desc');
+const vaultInput = document.getElementById('vault-password');
+const vaultSubmit = document.getElementById('vault-submit');
+const vaultError = document.getElementById('vault-error');
+
+async function handleVault() {
+  const pwd = vaultInput.value;
+  if (!pwd) return;
+
+  vaultSubmit.disabled = true;
+  vaultSubmit.textContent = 'Decrypting...';
+
+  const success = await unlockVault(pwd);
+  if (success) {
+    vaultModal.classList.add('hidden');
+    initTerminal();
+    initWizard();
+  } else {
+    vaultError.style.display = 'block';
+    vaultInput.value = '';
+    vaultInput.focus();
+    vaultSubmit.disabled = false;
+    vaultSubmit.textContent = 'Unlock Sandbox';
+  }
+}
+
+if (vaultSubmit) vaultSubmit.addEventListener('click', handleVault);
+if (vaultInput) {
+  vaultInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') handleVault();
+  });
+}
+
 // --- Launch Terminal ---
 function showTerminal() {
   hero.classList.add('hidden');
   terminalView.classList.remove('hidden');
-  initTerminal();
+  
+  if (isVaultUnlocked()) {
+    initTerminal();
+    initWizard();
+  } else {
+    if (!hasVault()) {
+      vaultTitle.textContent = 'Create Master Password';
+      vaultDesc.textContent = 'Please create a master password to encrypt your API keys locally on this device.';
+      vaultSubmit.textContent = 'Create Vault & Launch';
+    } else {
+      vaultTitle.textContent = 'Unlock Local Vault';
+      vaultDesc.textContent = 'Enter your Master Password to decrypt your API keys.';
+      vaultSubmit.textContent = 'Unlock Sandbox';
+    }
+    vaultModal.classList.remove('hidden');
+    setTimeout(() => vaultInput.focus(), 100);
+  }
 }
 
 launchBtn.addEventListener('click', showTerminal);

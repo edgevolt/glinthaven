@@ -10,10 +10,19 @@
 export default {
   id: 'abuseipdb',
   name: 'AbuseIPDB',
+  category: 'Network & Infrastructure',
   supportedTypes: ['ipv4', 'ipv6'],
   requiresKey: true,
   signupUrl: 'https://www.abuseipdb.com/register',
   rateLimit: '1,000 checks/day',
+
+  async testAuth(apiKey) {
+    const res = await fetch('/api/proxy/abuseipdb?ipAddress=127.0.0.1', {
+      headers: { 'Key': apiKey, 'Accept': 'application/json' }
+    });
+    if (res.status === 401 || res.status === 403) throw new Error('API Key invalid');
+    if (!res.ok) throw new Error('Could not verify API key');
+  },
 
   async query(ioc, apiKey) {
     const res = await fetch(

@@ -65,6 +65,15 @@ app.get('/api/proxy/nvd', async (req, res) => {
   await proxyRequest(endpoint, headers, res);
 });
 
+app.get('/api/proxy/urlscan', async (req, res) => {
+  const q = req.query.q;
+  const endpoint = `https://urlscan.io/api/v1/search/?q=${encodeURIComponent(q)}`;
+  const apiKey = req.headers['api-key'];
+  const headers = {};
+  if (apiKey) headers['API-Key'] = apiKey;
+  await proxyRequest(endpoint, headers, res);
+});
+
 // Serve frontend in production
 app.use(express.static(path.join(__dirname, 'dist')));
 app.get('*', (req, res) => {
