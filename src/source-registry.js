@@ -26,11 +26,22 @@
 //                      2) import it here
 //                      3) add it to the sources array below
 import virustotal from './sources/virustotal.js';
-import abuseipdb from './sources/abuseipdb.js';
-import shodan    from './sources/shodan.js';
-import otx       from './sources/otx.js';
-import nvd       from './sources/nvd.js';
-import urlscan   from './sources/urlscan.js';
+import abuseipdb  from './sources/abuseipdb.js';
+import shodan     from './sources/shodan.js';
+import otx        from './sources/otx.js';
+import nvd        from './sources/nvd.js';
+import urlscan    from './sources/urlscan.js';
+import wigle      from './sources/wigle.js';
+import pulsedive  from './sources/pulsedive.js';
+import ipwhois    from './sources/ipwhois.js';
+import geoip      from './sources/geoip.js';
+import arin       from './sources/arin.js';
+import netlas     from './sources/netlas.js';
+import hackertarget from './sources/hackertarget.js';
+import crtsh        from './sources/crtsh.js';
+import securitytrails from './sources/securitytrails.js';
+import hibp         from './sources/hibp.js';
+import bgpview      from './sources/bgpview.js';
 
 const sources = [
   virustotal,
@@ -39,6 +50,17 @@ const sources = [
   otx,
   nvd,
   urlscan,
+  wigle,
+  pulsedive,
+  ipwhois,
+  geoip,
+  arin,
+  netlas,
+  hackertarget,
+  crtsh,
+  securitytrails,
+  hibp,
+  bgpview,
 ];
 
 // ─── Validation (dev-time safety) ────────────────────────────────────

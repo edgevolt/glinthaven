@@ -6,7 +6,7 @@
 import { detectIOC } from './ioc-detector.js';
 import { queryIOC } from './api-client.js';
 import { getHelpOutput } from './help.js';
-import { getKeyStatus, renderSettings } from './settings.js';
+import { getKeyStatus, renderSettings, getPreference } from './settings.js';
 import {
   renderLoading,
   removeLoading,
@@ -33,6 +33,19 @@ let history = [];
 let historyIndex = -1;
 let isProcessing = false;
 let debugMode = false;
+let autocompleteEnabled = true; // updated from preference on init
+let sessionNotes = [];
+
+// Commands available for Tab completion
+const COMMANDS = [
+  'help', 'clear', 'history', 'settings', 'setup', 'lock', 'about', 'debug', 'search',
+  'note', 'notes', 'note-clear'
+];
+// Sub-completions for commands that take arguments
+const COMMAND_ARGS = {
+  help:  ['start', 'ioc', 'commands', 'examples', 'sources'],
+  debug: ['on', 'off'],
+};
 
 /**
  * Initialize the terminal.
@@ -43,14 +56,32 @@ export function initTerminal() {
   statusText = document.getElementById('status-text');
   statusDot = document.querySelector('.status-dot');
 
+  // Load autocomplete preference (default: enabled)
+  autocompleteEnabled = getPreference('autocomplete', true);
+
   // Restore history from sessionStorage
   try {
     const saved = sessionStorage.getItem('glinthaven_history');
     if (saved) history = JSON.parse(saved);
+    
+    const savedNotes = sessionStorage.getItem('glinthaven_notes');
+    if (savedNotes) sessionNotes = JSON.parse(savedNotes);
   } catch { }
+
+  // Build the ghost-text overlay that shows inline completion hints
+  setupGhostText();
 
   // Attach events
   input.addEventListener('keydown', handleKeyDown);
+  input.addEventListener('input', updateGhost);
+
+  // Live-update autocomplete toggle from the settings panel
+  window.addEventListener('glinthaven:pref-changed', (e) => {
+    if (e.detail.name === 'autocomplete') {
+      autocompleteEnabled = e.detail.value;
+      clearGhost();
+    }
+  });
 
   // Click anywhere in output to focus input
   output.addEventListener('click', () => input.focus());
@@ -79,17 +110,27 @@ function showWelcome() {
 }
 
 function handleKeyDown(e) {
+  if (e.key === 'Tab') {
+    e.preventDefault();
+    if (autocompleteEnabled) applyCompletion();
+    return;
+  }
   if (e.key === 'Enter') {
     e.preventDefault();
+    clearGhost();
     const cmd = input.value.trim();
     if (!cmd || isProcessing) return;
     executeCommand(cmd);
   } else if (e.key === 'ArrowUp') {
     e.preventDefault();
+    clearGhost();
     navigateHistory(-1);
   } else if (e.key === 'ArrowDown') {
     e.preventDefault();
+    clearGhost();
     navigateHistory(1);
+  } else if (e.key === 'Escape') {
+    clearGhost();
   }
 }
 
@@ -161,6 +202,15 @@ async function executeCommand(raw) {
     case 'search':
       await handleSearch(args);
       break;
+    case 'note':
+      addNote(args);
+      break;
+    case 'notes':
+      showNotes();
+      break;
+    case 'note-clear':
+      clearNotes();
+      break;
     default:
       // Try interpreting the entire input as an IOC
       await handleSearch(raw);
@@ -181,7 +231,15 @@ async function handleSearch(query) {
   let cleanQuery = query;
   if (/--debug\b/.test(query)) {
     useDebug = true;
-    cleanQuery = query.replace(/--debug\s*/g, '').trim();
+    cleanQuery = cleanQuery.replace(/--debug\s*/g, '').trim();
+  }
+
+  // Parse --source or -s flag
+  let specificSource = null;
+  const sourceMatch = cleanQuery.match(/--source(?:=|\s+)([a-zA-Z0-9-]+)|-s\s+([a-zA-Z0-9-]+)/);
+  if (sourceMatch) {
+    specificSource = sourceMatch[1] || sourceMatch[2];
+    cleanQuery = cleanQuery.replace(sourceMatch[0], '').trim();
   }
 
   const ioc = detectIOC(cleanQuery);
@@ -198,7 +256,12 @@ async function handleSearch(query) {
   if (useDebug) {
     appendHTML(`<div class="term-line term-system" style="font-size:0.8rem">⚙ Debug mode active — showing latency, HTTP status, and endpoints</div>`);
   }
-  appendHTML(renderSection(`Querying threat intelligence sources`));
+  
+  if (specificSource) {
+    appendHTML(renderSection(`Querying threat intel source: ${specificSource}`));
+  } else {
+    appendHTML(renderSection(`Querying threat intelligence sources`));
+  }
 
   setStatus('Searching…', true);
   isProcessing = true;
@@ -213,7 +276,7 @@ async function handleSearch(query) {
       appendHTML(renderResult(update));
       scrollToBottom();
     }
-  }, { debug: useDebug });
+  }, { debug: useDebug, sourceFilter: specificSource });
 
   // Summary
   appendHTML(renderSummary(results));
@@ -269,6 +332,147 @@ function openSettings() {
   modal.classList.remove('hidden');
 
   appendHTML(`<div class="term-line term-system">Settings panel opened. Configure your API keys there.</div>`);
+}
+
+function addNote(text) {
+  if (!text) {
+    appendHTML(`<div class="term-line term-warning">Usage: <span style="color:var(--cyan)">note &lt;text&gt;</span></div>`);
+    return;
+  }
+  const timestamp = new Date().toLocaleTimeString();
+  sessionNotes.push({ text, timestamp });
+  try { sessionStorage.setItem('glinthaven_notes', JSON.stringify(sessionNotes)); } catch { }
+  appendHTML(`<div class="term-line term-system">📝 Note saved continuously for this session. Use <span style="color:var(--cyan)">notes</span> to read.</div>`);
+}
+
+function showNotes() {
+  if (sessionNotes.length === 0) {
+    appendHTML(`<div class="term-line term-system">No notes saved. Type <span style="color:var(--cyan)">note [your text]</span> to add one.</div>`);
+    return;
+  }
+  appendHTML(`<div class="term-section">Session Notes</div>`);
+  let html = '';
+  sessionNotes.forEach((n, i) => {
+    html += `<div class="term-line"><span style="color:var(--text-muted);font-size:0.8rem;margin-right:0.5em">[${n.timestamp}]</span> ${escHTML(n.text)}</div>`;
+  });
+  appendHTML(html);
+}
+
+function clearNotes() {
+  sessionNotes = [];
+  try { sessionStorage.removeItem('glinthaven_notes'); } catch { }
+  appendHTML(`<div class="term-line term-system">📝 All session notes cleared.</div>`);
+}
+
+/* --- Autocomplete --- */
+
+let ghostEl = null;
+let currentCompletion = '';
+
+function setupGhostText() {
+  // Wrap the input in a relative-positioned div so the ghost
+  // sits flush with the start of the typed text (left: 0 = input's left edge).
+  const wrapper = document.createElement('div');
+  wrapper.style.cssText = 'position:relative;flex:1;display:flex;align-items:center;';
+
+  input.parentElement.insertBefore(wrapper, input);
+  wrapper.appendChild(input);
+  // Re-apply width so the input still fills the wrapper
+  input.style.width = '100%';
+
+  ghostEl = document.createElement('span');
+  ghostEl.id = 'terminal-ghost';
+  ghostEl.setAttribute('aria-hidden', 'true');
+  ghostEl.style.cssText = `
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 0;
+    pointer-events: none;
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    line-height: 1;
+    white-space: pre;
+    color: transparent;
+    user-select: none;
+  `;
+  wrapper.appendChild(ghostEl);
+}
+
+/**
+ * Find the best completion for the current input value.
+ * @returns {{ full: string, suffix: string } | null}
+ */
+function findCompletion(raw) {
+  const trimmed = raw.trimStart();
+  if (!trimmed) return null;
+
+  const parts = trimmed.split(/\s+/);
+  const cmd = parts[0].toLowerCase();
+
+  if (parts.length === 1) {
+    // Complete the command name
+    const match = COMMANDS.find(c => c.startsWith(cmd) && c !== cmd);
+    if (!match) return null;
+    return { full: match, suffix: match.slice(cmd.length) };
+  }
+
+  if (parts.length === 2 && COMMAND_ARGS[cmd]) {
+    // Complete a sub-argument
+    const partial = parts[1].toLowerCase();
+    const match = COMMAND_ARGS[cmd].find(a => a.startsWith(partial) && a !== partial);
+    if (!match) return null;
+    const full = `${cmd} ${match}`;
+    const suffix = match.slice(partial.length);
+    return { full, suffix };
+  }
+
+  return null;
+}
+
+function updateGhost() {
+  if (!autocompleteEnabled || !ghostEl) { clearGhost(); return; }
+
+  const raw = input.value;
+  const result = findCompletion(raw);
+
+  if (!result || !result.suffix) { clearGhost(); return; }
+
+  currentCompletion = result.full;
+
+  // Measure how wide the current typed text is so we can position the ghost suffix
+  const canvas = updateGhost._canvas || (updateGhost._canvas = document.createElement('canvas'));
+  const ctx = canvas.getContext('2d');
+  const style = window.getComputedStyle(input);
+  ctx.font = `${style.fontSize} ${style.fontFamily}`;
+  const typedWidth = ctx.measureText(raw).width;
+
+  ghostEl.style.left = `${typedWidth}px`;
+  ghostEl.style.color = 'var(--text-muted)';
+  ghostEl.textContent = result.suffix;
+}
+
+function clearGhost() {
+  currentCompletion = '';
+  if (ghostEl) {
+    ghostEl.textContent = '';
+    ghostEl.style.color = 'transparent';
+  }
+}
+
+function applyCompletion() {
+  if (!currentCompletion) {
+    // No pending ghost — cycle through all commands starting with current input
+    const raw = input.value.trimStart();
+    const result = findCompletion(raw);
+    if (result) {
+      input.value = result.full;
+      updateGhost();
+    }
+    return;
+  }
+  input.value = currentCompletion;
+  clearGhost();
 }
 
 /* --- DOM helpers --- */

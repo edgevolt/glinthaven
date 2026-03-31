@@ -5,6 +5,26 @@ All notable changes to Glinthaven will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.0-alpha] — 2026-03-30
+
+### Added
+- **WiGLE Integration** — Added WiGLE source for tracking and looking up WiFi networks by MAC address (BSSID) and SSID
+- **Pulsedive Integration** — Added Pulsedive source for advanced threat intelligence and risk scoring of IPs, Domains, and URLs
+- **IPWhois Integration** — Added IP geolocation and network intelligence via ipwho.is
+- **GeoIP Integration** — Added IP-API.com integration for advanced hosting and proxy detection
+- **ARIN RDAP Integration** — Added ARIN RDAP integration for regional IP registry lookup
+- **Session Notes** — Added a temporary scratchpad to store ephemeral notes via `note`, `notes`, and `note-clear` commands
+- **Command Autocomplete** — Added terminal command autocomplete using the <kbd>Tab</kbd> key, featuring an inline ghost-text preview. The feature can be toggled in the Settings menu
+- **New IOC Types** — Added auto-detection for MAC addresses, ASNs (Autonomous System Numbers), and SSIDs (using the `ssid:` prefix)
+- **Netlas.io Integration** — Added Netlas source for infrastructure mapping and domain-level threat intelligence
+- **HackerTarget Integration** — Added DNS enumeration, Reverse IP lookup, Subdomain Discovery, and asynchronous MTR Traceroute map generation
+- **BGPView Integration** — Added unauthenticated BGP routing capabilities, mapping IP NetBlock allocations and ASN tracking
+- **Certificate Transparency (crt.sh)** — Added crt.sh proxy to passively hunt for SSL/TLS certificates and wildcard subdomains
+- **SecurityTrails Integration** — Added historical DNS mapping and current WHOIS registry context via SecurityTrails
+- **Have I Been Pwned (HIBP)** — Added email breach verification indexing, equipped with explicit credential stuffing and Combo List detection algorithms
+- **Single-Source Filtering** — Users can now hone their OSINT queries to a single integration by appending `-s` or `--source` (e.g., `8.8.8.8 -s bgpview`)
+- **Legal Safeguards** — Introduced an initial Terms of Service UI acceptance modal and explicit legal disclaimers to protect users and the platform
+
 ## [0.1.0-alpha] — 2026-03-24
 
 ### Added

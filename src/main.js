@@ -25,6 +25,18 @@ const vaultInput = document.getElementById('vault-password');
 const vaultSubmit = document.getElementById('vault-submit');
 const vaultError = document.getElementById('vault-error');
 
+// --- Terms UI ---
+const termsModal = document.getElementById('terms-modal');
+const termsAcceptBtn = document.getElementById('terms-accept-btn');
+
+if (termsAcceptBtn) {
+  termsAcceptBtn.addEventListener('click', () => {
+    localStorage.setItem('glinthaven_terms_accepted', 'true');
+    termsModal.classList.add('hidden');
+    showTerminal();
+  });
+}
+
 async function handleVault() {
   const pwd = vaultInput.value;
   if (!pwd) return;
@@ -55,6 +67,11 @@ if (vaultInput) {
 
 // --- Launch Terminal ---
 function showTerminal() {
+  if (!localStorage.getItem('glinthaven_terms_accepted')) {
+    termsModal.classList.remove('hidden');
+    return;
+  }
+
   hero.classList.add('hidden');
   terminalView.classList.remove('hidden');
   

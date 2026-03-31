@@ -16,9 +16,19 @@ import { getApiKey, isSourceEnabled } from './settings.js';
  * @returns {Promise<object[]>}
  */
 export async function queryIOC(ioc, onUpdate, options = {}) {
-  const sources = getSourcesForType(ioc.type);
+  let sources = getSourcesForType(ioc.type);
   const results = [];
   const debug = options.debug || false;
+
+  if (options.sourceFilter) {
+    const filterId = options.sourceFilter.toLowerCase();
+    sources = sources.filter(s => s.id.toLowerCase() === filterId || s.name.toLowerCase() === filterId);
+    if (sources.length === 0) {
+       const err = { source: 'System', status: 'error', error: `Source '${options.sourceFilter}' not found or doesn't support ${ioc.type} lookups.` };
+       onUpdate(err);
+       return [err];
+    }
+  }
 
   const promises = sources.map(async (source) => {
     if (!isSourceEnabled(source.id)) return;

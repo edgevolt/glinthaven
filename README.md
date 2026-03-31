@@ -10,7 +10,7 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/version-0.1.0--alpha-blue.svg" alt="Version" />
+  <img src="https://img.shields.io/badge/version-0.2.0--alpha-blue.svg" alt="Version" />
   <img src="https://img.shields.io/badge/license-MIT-blue" alt="License" />
   <img src="https://img.shields.io/badge/bundle-7.5KB_gzipped-green" alt="Bundle size" />
 </p>
@@ -25,8 +25,8 @@ Glinthaven is a lightweight web app that lets you look up security Indicators of
 
 ## Features
 
-- **Auto-detect IOC type** — IPv4, IPv6, domain, URL, MD5/SHA1/SHA256 hash, email, CVE
-- **4 threat intel sources** — VirusTotal, AbuseIPDB, Shodan, AlienVault OTX
+- **Auto-detect IOC type** — IPv4, IPv6, domain, URL, MD5/SHA1/SHA256 hash, email, CVE, MAC/BSSID, SSID
+- **Multiple threat intel sources** — VirusTotal, AbuseIPDB, Shodan, AlienVault OTX, WiGLE, Pulsedive
 - **Parallel queries** — all sources queried simultaneously with streaming results
 - **CLI interface** — command history (↑/↓), built-in help, familiar terminal UX
 - **Newcomer-friendly** — quick-start guide, examples, contextual tips
@@ -62,6 +62,9 @@ Try `help start` in the terminal for a guided walkthrough.
 | `debug [on\|off]` | Toggle persistent debug mode for all searches |
 | `help [topic]` | Show help (`commands`, `ioc`, `start`, `examples`, `api`) |
 | `settings` | Open API key configuration |
+| `note <text>` | Save a temporary note for the current session |
+| `notes` | View all saved session notes |
+| `note-clear` | Clear all session notes |
 | `clear` | Clear the terminal |
 | `history` | Show command history |
 | `about` | About Glinthaven |
@@ -79,6 +82,9 @@ Try `help start` in the terminal for a guided walkthrough.
 | SHA-256 | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
 | Email | `attacker@evil.com` |
 | CVE | `CVE-2024-1234` |
+| MAC / BSSID | `00:1A:2B:3C:4D:5E` |
+| SSID | `ssid:StarbucksWiFi` |
+| ASN | `AS15169` |
 
 ## API Keys
 
@@ -90,8 +96,16 @@ Glinthaven uses free-tier APIs. Keys are stored in your browser's `localStorage`
 | **AbuseIPDB** | 1,000 checks/day | [abuseipdb.com](https://www.abuseipdb.com/register) |
 | **Shodan** | Basic lookups | [shodan.io](https://account.shodan.io/register) |
 | **AlienVault OTX** | Unlimited (no key needed) | [otx.alienvault.com](https://otx.alienvault.com/accounts/signup/) |
+| **WiGLE** | Built-in free tier | [wigle.net](https://wigle.net/account) |
+| **Pulsedive** | 30 requests/min | [pulsedive.com](https://pulsedive.com/account/) |
+| **Netlas.io** | 50 queries/day | [app.netlas.io](https://app.netlas.io/registration/) |
+| **SecurityTrails** | 50 requests/month | [securitytrails.com](https://securitytrails.com/app/signup) |
+| **Have I Been Pwned** | 10 requests/min (Paid) | [haveibeenpwned.com](https://haveibeenpwned.com/API/Key) |
+| **HackerTarget** | 100 queries/day (no key needed) | [hackertarget.com](https://hackertarget.com/) |
+| **crt.sh** | Unlimited (no key needed) | [crt.sh](https://crt.sh/) |
+| **BGPView** | Unlimited (no key needed) | [bgpview.io](https://bgpview.io/) |
 
-> **Note:** AlienVault OTX works without an API key, so you can start searching immediately.
+> **Note:** AlienVault OTX, HackerTarget, crt.sh, and BGPView work robustly without an API key, so you can start mapping infrastructure and recon immediately.
 
 ## Deploying with Docker
 
@@ -147,12 +161,20 @@ glinthaven/
         ├── virustotal.js
         ├── abuseipdb.js
         ├── shodan.js
-        └── otx.js
+        ├── otx.js
+        ├── urlscan.js
+        ├── nvd.js
+        ├── wigle.js
+        └── pulsedive.js
 ```
 
 ## Contributing
 
 Want to add a new threat intel source? See [CONTRIBUTING.md](CONTRIBUTING.md) for the plugin interface and step-by-step instructions. It's designed to be easy — create one file, register it, done.
+
+## Legal Disclaimer
+
+Glinthaven is designed strictly for defensive security research, OSINT gathering, and educational purposes. Ensure you have the necessary permissions and legal rights to query or investigate any infrastructure or data you input into this platform. The developers assume no liability and are not responsible for any misuse, damage, or illegal activities conducted using this tool.
 
 ## License
 

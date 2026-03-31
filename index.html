@@ -102,6 +102,16 @@
       </div>
     </div>
 
+    <!-- Terms Modal -->
+    <div id="terms-modal" class="modal-overlay hidden" style="z-index: 10000; backdrop-filter: blur(10px); background: rgba(0,0,0,0.85);">
+      <div class="modal-card" style="max-width: 500px; padding: var(--sp-lg)">
+        <h2 style="margin-bottom: var(--sp-sm)">Legal Disclaimer</h2>
+        <p style="color:var(--text-secondary); margin-bottom: var(--sp-sm); font-size: 0.95rem; line-height: 1.5;">Glinthaven is designed strictly for defensive security research and OSINT.</p>
+        <p style="color:var(--text-secondary); margin-bottom: var(--sp-md); font-size: 0.95rem; line-height: 1.5;">You explicitly agree that you have the necessary legal rights to query or investigate any infrastructure or data input into this platform. The developers assume no liability for misuse, damage, or illegal activities conducted via this tool.</p>
+        <button id="terms-accept-btn" class="launch-btn" style="width: 100%; border-color: var(--danger, #ff8181); color: var(--danger, #ff8181);">I Accept and Agree</button>
+      </div>
+    </div>
+
     <!-- Vault Modal -->
     <div id="vault-modal" class="modal-overlay hidden" style="z-index: 9999; backdrop-filter: blur(10px); background: rgba(0,0,0,0.85);">
       <div class="modal-card" style="max-width: 400px; padding: var(--sp-lg)">

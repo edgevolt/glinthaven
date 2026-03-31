@@ -3,6 +3,9 @@
  *
  * Dynamically pulls service definitions from the source registry,
  * so adding a new source automatically adds it to the settings panel.
+ *
+ * Preferences (non-key settings) are also stored in the vault under
+ * the _pref_<name> key prefix so they persist across sessions.
  */
 
 import { getAllSources } from './source-registry.js';
@@ -125,6 +128,31 @@ export function setSourceEnabled(sourceId, enabled) {
   flushVault().catch(console.error);
 }
 
+// ─── Preferences ─────────────────────────────────────────────────────
+
+/**
+ * Get a named preference value.
+ * @param {string} name
+ * @param {*} defaultValue
+ * @returns {*}
+ */
+export function getPreference(name, defaultValue = null) {
+  if (!isUnlocked) return defaultValue;
+  const val = unlockedKeys[`_pref_${name}`];
+  return val === undefined ? defaultValue : val;
+}
+
+/**
+ * Set a named preference value.
+ * @param {string} name
+ * @param {*} value
+ */
+export function setPreference(name, value) {
+  if (!isUnlocked) return;
+  unlockedKeys[`_pref_${name}`] = value;
+  flushVault().catch(console.error);
+}
+
 /**
  * Render the settings form into the modal body.
  * Automatically includes all registered sources.
@@ -133,6 +161,37 @@ export function renderSettings(container) {
   container.innerHTML = '';
   const sources = getAllSources();
 
+  // ── Terminal Preferences section ──────────────────────────────────
+  const termHeader = document.createElement('h3');
+  termHeader.className = 'setting-category-title';
+  termHeader.textContent = 'Terminal';
+  container.appendChild(termHeader);
+
+  const autocompleteEnabled = getPreference('autocomplete', true);
+  const termGroup = document.createElement('div');
+  termGroup.className = 'setting-group';
+  termGroup.innerHTML = `
+    <label class="setting-label" style="cursor:pointer">
+      <input type="checkbox" id="pref-autocomplete" ${autocompleteEnabled ? 'checked' : ''} style="margin-right:0.5em" />
+      Command Autocomplete
+      <span class="service-badge">${autocompleteEnabled ? 'enabled' : 'disabled'}</span>
+    </label>
+    <p class="setting-hint">When enabled, press <kbd style="font-family:var(--font-mono);font-size:0.7rem;padding:0.1em 0.4em;border:1px solid var(--bg-elevated);border-radius:3px;background:var(--bg-primary)">Tab</kbd> to complete commands. An inline ghost-text preview appears as you type.</p>
+  `;
+  container.appendChild(termGroup);
+
+  termGroup.querySelector('#pref-autocomplete').addEventListener('change', (e) => {
+    const enabled = e.target.checked;
+    setPreference('autocomplete', enabled);
+    const badge = termGroup.querySelector('.service-badge');
+    badge.textContent = enabled ? 'enabled' : 'disabled';
+    // Notify terminal.js via a custom event so it can update live
+    window.dispatchEvent(new CustomEvent('glinthaven:pref-changed', {
+      detail: { name: 'autocomplete', value: enabled }
+    }));
+  });
+
+  // ── API Source sections ───────────────────────────────────────────
   // Group by category
   const categories = {};
   for (const src of sources) {
